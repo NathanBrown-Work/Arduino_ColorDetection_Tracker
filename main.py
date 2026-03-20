@@ -5,7 +5,8 @@ from matplotlib.patches import Polygon
 from matplotlib.animation import FuncAnimation
 from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 
-# Parameters for Graphs
+# Concept for Kinematic Equations Loop
+"""
 l1 = 4
 l2 = 7
 theta1 = np.radians(120)
@@ -13,7 +14,7 @@ theta2 = np.radians(56)
 
 x_final = l1 * np.cos(theta1) + l2 * np.cos(theta1 + theta2)
 y_final = l1 * np.sin(theta1) + l2 * np.sin(theta1 + theta2)
-""" In theory:
+    In theory:
     robot_len = [2, 5, 3, 2, 4]
     robot_theta = [46, 50, 120, 80, 47]
     robot_theta_cum = 0
