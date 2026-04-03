@@ -3,6 +3,7 @@ from tkinter import messagebox
 from pyfirmata2 import Arduino, util
 import time
 import basic_functions as bf
+import webcam as wc
 # ----------------------------------------------------
 # Initialize Python Recognition of Arduino and Tkinter
 # ----------------------------------------------------
@@ -71,4 +72,6 @@ if __name__ == "__main__":
     # bf.sanityCheck(board)
     # ledSwitchGUI(3)
     # servoMotorGUI(9)
+    # wc.color_tracking_old()
+    # wc.coloredObjTracking()
     exit()
