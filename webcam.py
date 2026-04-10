@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 
 
-def color_tracking_old():
+def colorTrackingOld():
     cap = cv2.VideoCapture(0)
 
     # --- HSV Color Ranges ---
