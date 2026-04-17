@@ -109,39 +109,6 @@ if __name__ == "__main__":
     # ------------- Confirm closing ------------------------------------------
     win.protocol("WM_DELETE_WINDOW", lambda: bf.on_closing(board, win))
     # ========================================================================
-    # tk._test()
-    # bf.sanityCheck(board)
-    # ledSwitchGUI(3)
-    # servoMotorGUI(9)
-    # wc.colorTrackingOld()
-    # wc.coloredObjTracking()
-    # webcamBlueTracker()
-
-    digital_pin = (input("If you have a pin wired for an LED, enter its number here. If not, enter no: ")
-                   .strip().lower())
-    servo_pin = (input("If you have a pin wired for a Servo Motor, enter its number here. If not, enter no: ")
-                 .strip().lower())
-    wc_plugged = input("If you have a plugged in webcam, enter yes. If not, enter no: ").strip().lower()
-
-    if digital_pin == "no":
-        digital_pin = None
-    else:
-        try:
-            digital_pin = int(digital_pin)
-        except ValueError:
-            print("Invalid number for led pin")
-            exit()
-    if servo_pin == "no":
-        servo_pin = None
-    else:
-        try:
-            servo_pin = int(servo_pin)
-        except ValueError:
-            print("Invalid number for motor pin")
-            exit()
-    if wc_plugged not in ("yes", "no"):
-        print("Invalid yes/no for webcam state")
-        exit()
-
+    digital_pin, servo_pin, wc_plugged = bf.introduction()  # Will exit program if failed
     arduinoControlPanel(digital_pin, servo_pin, wc_plugged)
     exit()
