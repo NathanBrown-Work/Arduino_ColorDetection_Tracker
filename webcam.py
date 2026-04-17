@@ -3,6 +3,11 @@ import numpy as np
 
 
 def colorTrackingOld():
+    """
+    colorTrackingOld begins capturing live feed through the user's webcam. Then, it proceeds
+    to return live feed of exclusively blue and red objects detected by the webcam
+    :return:
+    """
     cap = cv2.VideoCapture(0)
 
     # --- HSV Color Ranges ---
@@ -67,6 +72,12 @@ def colorTrackingOld():
 
 
 def coloredObjTracking():
+    """
+    coloredObjTracking begins capturing live feed through the user's webcam. Then, it proceeds
+    to return live feed of exclusively blue objects detected by the webcam. Finally, it specifies
+    in the live feed the center coordinates of the largest blue object detected
+    :return:
+    """
     cap = cv2.VideoCapture(0)
 
     # HSV Values
