@@ -9,6 +9,8 @@ import time
 # 4 = SERVO ; Used for .write(0-180)
 # =========================================================================
 
+DIR = 0  # Direction of Stepper Motor, should only be 0 or 1
+
 
 def sanityCheck(board):  # NOTE! Upload StandardFirmware, if any code is not working, from ArduinoIDE
     """
@@ -28,37 +30,55 @@ def sanityCheck(board):  # NOTE! Upload StandardFirmware, if any code is not wor
     print("sanityCheck has ended!")
 
 
+def getIntOrNone(prompt, err_msg):
+    while True:
+        response = input(prompt).strip().lower()
+        if response == "no":
+            return None
+        try:
+            return int(response)
+        except ValueError:
+            print(err_msg)
+
+
+def getYesOrNo(prompt):
+    while True:
+        response = input(prompt).strip().lower()
+        if response in ("yes", "no"):
+            return response
+        print("Invalid Input. Please enter 'yes' or 'no'.")
+
+
 def introduction():
     """
     introduction asks the user to provide required information regarding the control panel's functionality
     :return:
     """
-    digital_pin = (input("If you have a pin wired for an LED, enter its number here. If not, enter no: ")
-                   .strip().lower())
-    servo_pin = (input("If you have a pin wired for a Servo Motor, enter its number here. If not, enter no: ")
-                 .strip().lower())
-    wc_plugged = input("If you have a plugged in webcam, enter yes. If not, enter no: ").strip().lower()
+    digital_pin = getIntOrNone(
+        "If you have a pin wired for an LED, enter its number here. If not, enter 'no': ",
+        "Invalid number for LED pin. Type the number or enter 'no'."
+    )
 
-    if digital_pin == "no":
-        digital_pin = None
-    else:
-        try:
-            digital_pin = int(digital_pin)
-        except ValueError:
-            print("Invalid number for led pin")
-            exit()
-    if servo_pin == "no":
-        servo_pin = None
-    else:
-        try:
-            servo_pin = int(servo_pin)
-        except ValueError:
-            print("Invalid number for motor pin")
-            exit()
-    if wc_plugged not in ("yes", "no"):
-        print("Invalid yes/no for webcam state")
-        exit()
-    return digital_pin, servo_pin, wc_plugged
+    servo_pin = getIntOrNone(
+        "If you have a pin wired for a Servo Motor, enter its number here. If not, enter 'no': ",
+        "Invalid number for Motor Pin. Type the number or enter 'no'."
+    )
+
+    wc_plugged = getYesOrNo(
+        "If you have a plugged in webcam, enter 'yes'. If not, enter 'no': "
+    )
+
+    dir_pin = getIntOrNone(
+        "If you have a direction pin wired for a Stepper Motor, enter its number here. If not, enter 'no': ",
+        "Invalid number for Direction Pin. Type the number or enter 'no'."
+    )
+    if dir_pin is not None:
+        step_pin = getIntOrNone(
+            "Enter your stepper motor Step Pin here: ",
+            "Invalid number for a Step Pin. Type the number here: "
+        )
+
+    return digital_pin, servo_pin, wc_plugged, dir_pin, step_pin
 
 
 def digPinON(digital_pin, board):
@@ -99,7 +119,7 @@ def servoAngle(angle, servo_pin, board):
     print(f"{angle} Achieved")
 
 
-def stepperTest(dir_pin, step_pin, board):
+def stepperTest(dir_pin, step_pin, lock, getDir, motor_state, board):
     # Move forward
     delay = 0.002  # Seconds
 
@@ -109,18 +129,38 @@ def stepperTest(dir_pin, step_pin, board):
     lead_screw_pitch = 0.5  # Millimeters
     steps_per_mm = steps_per_rev/lead_screw_pitch  # Steps to Move Approx 1 Millimeter -> 40 Steps at 0.5 screw pitch
 
-    board.digital[dir_pin].mode = 1
-    board.digital[step_pin].mode = 1
-    board.digital[dir_pin].write(1)
+    last_direction = 0
 
-    for _ in range(int(steps_per_mm*4)):
-        board.digital[step_pin].write(1)
-        # time.sleep(delay)
-        board.digital[step_pin].write(0)
+    with lock:
+        board.digital[dir_pin].mode = 1
+        board.digital[step_pin].mode = 1
+
+    while not motor_state["stop"]:
+        direction = getDir()  # Reads live direction
+        if direction is None:
+            time.sleep(delay)
+            continue
+
+        last_direction = direction
+
+        with lock:
+            board.digital[dir_pin].write(direction)
+            board.digital[step_pin].write(1)
+
+        time.sleep(delay)
+
+        with lock:
+            board.digital[step_pin].write(0)
+
         time.sleep(delay)
 
 
-def on_closing(board, win):
+def toggleDIR():
+    global DIR
+    DIR = 0 if DIR == 1 else 1
+
+
+def onClosing(board, win):
     """
     on_closing ensures both the Ardunio's COM Port and Tkinter's window closes
     :param board:
@@ -133,4 +173,3 @@ def on_closing(board, win):
 
 def placeHolder():
     print("This is placeholder text")
-
