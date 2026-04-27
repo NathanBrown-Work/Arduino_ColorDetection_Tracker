@@ -7,6 +7,8 @@ IMPORTANT! -> The step motor, in current iteration, will continuously move the d
 
 IMPORTANT! -> The STL File for Foot_ThrIns_MotorSd is roughly 2mm too short. Use longer screws to actually reach (I used M3 x 12mm)
 
+IMPORTANT! -> robotarm_generator.py is not necessary for this project's goals. It was left for documentation and convenience reasons if the user wants to use it. The entire file runs independently from the rest and has its own main.
+
 Camera Slider Components (Amazon Link Attached):
 1. 2020 V Slot Aluminum Extrusion Linear Rail (11.81 Inches) (https://www.amazon.com/dp/B087PVM2NT?ref=ppx_yo2ov_dt_b_fed_asin_title&th=1)
 2. Nema 17 Stepper Motor 12V 0.4A (https://www.amazon.com/dp/B00PNEQ9T4?ref=ppx_yo2ov_dt_b_fed_asin_title)
