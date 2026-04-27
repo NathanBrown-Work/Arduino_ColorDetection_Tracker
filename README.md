@@ -3,7 +3,7 @@ Personal project to develop a functional Python-Arduino integration. This projec
 
 This code was developed on Windows OS.
 
-IMPORTANT! -> The step motor, in current iteration, will continuously move the desired direction WITHOUT stopping. Be careful not to break the pulley object due to this lack of safeguard.
+IMPORTANT! -> The step motor, in current iteration, will continuously move the desired direction WITHOUT stopping unless the object is center of the frame. Be careful not to break the pulley object due to this lack of safeguard.
 
 IMPORTANT! -> The STL File for Foot_ThrIns_MotorSd is roughly 2mm too short. Use longer screws to actually reach (I used M3 x 12mm)
 
