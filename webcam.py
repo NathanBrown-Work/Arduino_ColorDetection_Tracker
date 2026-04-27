@@ -71,7 +71,7 @@ def colorTrackingOld():
     cv2.destroyAllWindows()
 
 
-def coloredObjTracking():
+def coloredObjTracking(update_position):
     """
     coloredObjTracking begins capturing live feed through the user's webcam. Then, it proceeds
     to return live feed of exclusively blue objects detected by the webcam. Finally, it specifies
@@ -112,6 +112,7 @@ def coloredObjTracking():
 
                 if M["m00"] != 0:
                     cx = int(M["m10"] / M["m00"])
+                    update_position(cx, bgr_frame.shape[1])  # pass x + frame width
                     cy = int(M["m01"] / M["m00"])
 
                     # Draw center point
