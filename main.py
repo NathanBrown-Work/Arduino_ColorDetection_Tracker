@@ -76,7 +76,7 @@ def arduinoControlPanel(digital_pin=None, servo_pin=None, wc_plugged="no", dir_p
     if wc_plugged == "yes":
         blue_track_check.config(state="normal")
     blue_track_check.pack()
-    auto_camsld_bool = tk.BooleanVar(value=True)
+    auto_camsld_bool = tk.BooleanVar()
     auto_camsld_check = tk.Checkbutton(option_frame, text="Enable Auto Cam Slider GUI",
                                        variable=auto_camsld_bool, state="disabled")
     if (dir_pin is not None) and (step_pin is not None):
